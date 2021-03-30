@@ -1,3 +1,5 @@
+# Trexe me Python 3 (oxi v2)
+
 # Fortosi tou built-in module random
 import random
 
@@ -17,7 +19,7 @@ class State:
 
         # Trexe gia kathe dikti kai timi
         for (index, value) in enumerate(st):
-            print(' %s ' % value, end=' ')
+            print(" %s " % value, end=" ")
             
             # An o diktis vriskete se afto to range
             if index in [x for x in range(self.nsize - 1, self.tsize, self.nsize)]:
@@ -119,7 +121,7 @@ class State:
             self.printst(st) # ektiposi
 
 # An to trexis katefthian apo command-line
-if __name__ == '__main__':
+if __name__ == "__main__":
     print("[+] EPILITIS N-PUZZLE [+]\n")
     state = State(3)
     print("[*] ARXIKI KATASTASI: ")
