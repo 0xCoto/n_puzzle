@@ -5,58 +5,58 @@ import random
 # Fortosi sleep gia delays
 from time import sleep
 
-# Taxi katastasis
+# Taxi katastasisn_megethos
 class State:
     # Vasiki sinartisi
-    def __init__(self, nsize):
-        # Orise to provlima n-puzzle, me n-size timi, tsize to sinoliko plithos ton komvon kai initial to goal state apo n
+    def __init__(self, n_megethos):
+        # Orise to provlima n-puzzle, me n-size timi, t_megethos to sinoliko plithos ton komvon kai initial to stoxos state apo n
 
-        self.nsize = nsize
-        self.tsize = pow(self.nsize, 2)
-        self.goal = list(range(1, self.tsize))
-        self.goal.append(0)
+        self.n_megethos = n_megethos
+        self.t_megethos = pow(self.n_megethos, 2)
+        self.stoxos = list(range(1, self.t_megethos))
+        self.stoxos.append(0)
 
-    def printst(self, st):
+    def ektiposi_vima(self, st):
         # Ektipose ti lista se morfi mitras
 
         # Trexe gia kathe dikti kai timi
         for (index, value) in enumerate(st):
             print(" %s " % value, end=" ")
+            sleep(0.1)
             
             # An o diktis vriskete se afto to range
-            if index in [x for x in range(self.nsize - 1, self.tsize, self.nsize)]:
-                print() #do nothing/break?
+            if index in [x for x in range(self.n_megethos - 1, self.t_megethos, self.n_megethos)]:
+                print()
         print() 
 
-    def getvalues(self, key):
+    def fetch_times(self, key):
         # Voithitiki sinartisi gia na pernis tis eleftheres kinisis se diafores thesis klidia sti mitra
 
-        values = [1, -1, self.nsize, -self.nsize]
-        valid = []
+        values = [1, -1, self.n_megethos, -self.n_megethos]
+        egiro = []
         for x in values:
-            if 0 <= key + x < self.tsize:
-                if x == 1 and key in range(self.nsize - 1, self.tsize, 
-                        self.nsize):
+            if 0 <= key + x < self.t_megethos:
+                if x == 1 and key in range(self.n_megethos - 1, self.t_megethos, 
+                        self.n_megethos):
                     continue
-                if x == -1 and key in range(0, self.tsize, self.nsize):
+                if x == -1 and key in range(0, self.t_megethos, self.n_megethos):
                     continue
-                valid.append(x)
-        return valid
+                egiro.append(x)
+        return egiro
 
     def expand(self, st):
         # Paroxi tis listas ton epomenon dinaton katastaseon apo tin torini katastasi
 
         pexpands = {}
-        for key in range(self.tsize):
-            pexpands[key] = self.getvalues(key)
+        for key in range(self.t_megethos):
+            pexpands[key] = self.fetch_times(key)
         pos = st.index(0)
-        moves = pexpands[pos]
+        kinisis = pexpands[pos]
         expstates = []
-        for mv in moves:
-            nstate = st[:]
-            (nstate[pos + mv], nstate[pos]) = (nstate[pos], nstate[pos + 
-                    mv])
-            expstates.append(nstate)
+        for mv in kinisis:
+            n_katastasi = st[:]
+            (n_katastasi[pos + mv], n_katastasi[pos]) = (n_katastasi[pos], n_katastasi[pos + mv])
+            expstates.append(n_katastasi)
         return expstates
 
     def one_of_poss(self, st):
@@ -66,79 +66,79 @@ class State:
         rand_st = random.choice(exp_sts)
         return rand_st
 
-    def start_state(self, seed=1000):
+    def start_vimaate(self, seed=1000):
         # Kathorise tin arxiki katastasi tou provlimatos
 
-        start_st = (self.goal)[:]
+        start_vima = (self.stoxos)[:]
         for sts in range(seed):
-            start_st = self.one_of_poss(start_st)
-        return start_st
+            start_vima = self.one_of_poss(start_vima)
+        return start_vima
 
-    def goal_reached(self, st):
+    def stoxos_reached(self, st):
         # Elenxos ean o stoxos epitefxthike i oxi
 
-        return st == self.goal # epistrofi alithis i psevdis
+        return st == self.stoxos # epistrofi alithis i psevdis
 
     def manhattan_distance(self, st):
-        # Ipologise tin apostasi manhattan tis ekastote katastasis
+        # Ipologise tin apostasi Manhattan tis ekastote katastasis
 
-        mdist = 0
+        manhattan_apostasi = 0
         
         # Gia kathe komvo
         for node in st:
             # An o komvos den ine 0
             if node != 0:
-                gdist = abs(self.goal.index(node) - st.index(node))
-                (jumps, steps) = (gdist // self.nsize, gdist % self.nsize)
-                mdist += jumps + steps
+                gdist = abs(self.stoxos.index(node) - st.index(node))
+                (jumps, steps) = (gdist // self.n_megethos, gdist % self.n_megethos)
+                manhattan_apostasi += jumps + steps
 
         # Epestrepse tin apostasi manhattan
-        return mdist
+        return manhattan_apostasi
 
     def huristic_next_state(self, st):
-        # Huristic function (kathorismos tis epomenis katastasis pou erxete kai xrisimopii tin methodo apostasis manhattan san ta huristics
+        # Huristic function (kathorismos tis epomenis katastasis pou erxete kai xrisimopii tin methodo apostasis Manhattan os ta huristics). I methodos anazitisis ine AST (A* search, me Manhattan distance heuristic) 
         
         exp_sts = self.expand(st)
-        mdists = []
+        manhattan_apostasis = []
         for st in exp_sts:
-            mdists.append(self.manhattan_distance(st))
+            manhattan_apostasis.append(self.manhattan_distance(st))
 
         # Taksinomise kata afksousa sira
-        mdists.sort()
-        short_path = mdists[0]
-        if mdists.count(short_path) > 1:
-            least_paths = [st for st in exp_sts if self.manhattan_distance(st) == short_path]
-            return random.choice(least_paths)
+        manhattan_apostasis.sort()
+        short_path = manhattan_apostasis[0]
+        if manhattan_apostasis.count(short_path) > 1:
+            elaxista_monopatia = [st for st in exp_sts if self.manhattan_distance(st) == short_path]
+            return random.choice(elaxista_monopatia)
         else:
             for st in exp_sts:
                 if self.manhattan_distance(st) == short_path:
                     return st
 
-    def solve_it(self, st):
+    def epilisi(self, st):
         # Epilisi
         
         # Ean den exi epitefxthi o stoxos
-        while not self.goal_reached(st):
+        while not self.stoxos_reached(st):
             st = self.huristic_next_state(st)
-            self.printst(st) # ektiposi
+            self.ektiposi_vima(st) # ektiposi
 
-# An to trexis katefthian apo command-line
-if __name__ == "__main__":
-    print("[+] EPILITIS N-PUZZLE [+]\n")
-    sleep(2)
-    state = State(3)
-    print("[*] ARXIKI KATASTASI: ")
-    sleep(1)
-    start = state.start_state(5)
-    state.printst(start)
-    sleep(2)
-    print("[*] KATASTASI STOXOU: ")
-    sleep(1)
-    state.printst(state.goal)
-    sleep(2)
-    print("\n-----" )
-    sleep(1)
-    print("[!] Ekkinisi..."+"\n")
-    sleep(2)
-    state.printst(start)
-    state.solve_it(start)
+# -------------------
+# Kalesma sinartiseon
+print("[+] EPILITIS N-PUZZLE [+]\n")
+sleep(2)
+state = State(3)
+print("[*] ARXIKI KATASTASI: ")
+sleep(1)
+start = state.start_vimaate(5)
+state.ektiposi_vima(start)
+sleep(2)
+print("[*] KATASTASI STOXOU: ")
+sleep(1)
+state.ektiposi_vima(state.stoxos)
+sleep(2)
+print("\n---------------")
+sleep(1)
+print("[!] Ekkinisi..."+"\n")
+sleep(2)
+state.ektiposi_vima(start)
+state.epilisi(start)
