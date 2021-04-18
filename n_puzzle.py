@@ -2,6 +2,8 @@
 
 # Fortosi tou built-in module random
 import random
+# Fortosi sleep gia delays
+from time import sleep
 
 # Taxi katastasis
 class State:
@@ -123,13 +125,20 @@ class State:
 # An to trexis katefthian apo command-line
 if __name__ == "__main__":
     print("[+] EPILITIS N-PUZZLE [+]\n")
+    sleep(2)
     state = State(3)
     print("[*] ARXIKI KATASTASI: ")
+    sleep(1)
     start = state.start_state(5)
     state.printst(start)
+    sleep(2)
     print("[*] KATASTASI STOXOU: ")
+    sleep(1)
     state.printst(state.goal)
+    sleep(2)
     print("\n-----" )
+    sleep(1)
     print("[!] Ekkinisi..."+"\n")
+    sleep(2)
     state.printst(start)
     state.solve_it(start)
